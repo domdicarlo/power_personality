@@ -1,0 +1,67 @@
+---
+title: "Power and Personality"
+author: "Dominic DiCarlo"
+date: "July 29, 2019"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r library import}
+
+#Import libraries
+library(readr)
+library(dplyr)
+library(tidyr)
+library(tidyverse)
+
+```
+
+```{r csv import}
+
+# path to csv data
+csv_path <- "./p&p_dummy_data.csv"
+
+# read in the qualtrics csv. change the csv_path variable
+# to the file path to the data
+the_data <- read_csv(csv_path)
+
+# let's remove a bunch of junk book keeping columns qualtrics 
+# keeps track of
+data_important_cols <- the_data %>%
+  select(-"StartDate", -"EndDate", -"Status", -"IPAddress", -"Progress",
+         -"Duration (in seconds)", -"Finished", -"RecordedDate", 
+         -"ResponseId", -"RecipientLastName", -"RecipientFirstName",
+         -"RecipientEmail", -"ExternalReference", -"LocationLatitude",
+         -"LocationLongitude", -"DistributionChannel", -"UserLanguage",
+         -"consent", -"email")
+
+# also have to delete some extra rows from qualtrics data
+data_important_cols <- data_important_cols[-c(1, 2), ]
+
+
+# turn char into numbers
+data_important_cols <- data_important_cols %>%
+  mutate_at(c(1:117), as.numeric) %>%
+  # mac ss exception (what is this?) from 118-127
+  mutate_at(c(128:138), as.numeric) %>%
+  # another exception at 139. "other" for standardized test score
+  # some people will fill in didn't take, or put in some strange test
+  mutate_at(c(140:386), as.numeric)
+  # last columns (387-399) are more confusing data. stuff like major,
+  # occupation. I have left these for now. 
+  
+  
+
+data_important_cols
+
+```
+
+```{r MSOI}
+
+data_clean <- data_important_cols %>%
+  
+
+```
