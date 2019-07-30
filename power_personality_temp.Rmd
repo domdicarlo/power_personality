@@ -61,21 +61,62 @@ data_important_cols
 
 ```{r MSOI}
 
-data_clean <- data_important_cols %>%
-  
+# FILL
 
 ```
 
 ```{r HSNS}
 
+# clean up and score HSNS data
+
 data_hsns <- data_important_cols %>%
   select(HSNS_1, HSNS_2, HSNS_3, HSNS_4, HSNS_5, HSNS_6, HSNS_7,
          HSNS_8, HSNS_9, HSNS_10) %>%
-  mutate("HSNS Score" = HSNS_1 + HSNS_2 + HSNS_3 + HSNS_4 + HSNS_5 + HSNS_6 + HSNS_7 + 
-         HSNS_8 + HSNS_9 + HSNS_10)
+  # this is an easy way to sum across all rows
+  mutate("HSNS Score" = rowSums(.)) 
 
 data_hsns
 
 ```
 
 
+
+```{r NPI}
+
+# clean up and score NPI data
+
+data_npi <- data_important_cols %>%
+  select(NPI_1, NPI_2, NPI_3, NPI_4, NPI_5, NPI_6, NPI_7, NPI_8, NPI_9,
+         NPI_10, NPI_11, NPI_12, NPI_13, NPI_14, NPI_15, NPI_16, NPI_17,
+         NPI_18, NPI_19, NPI_20, NPI_21, NPI_22, NPI_23, NPI_24, 
+         NPI_25, NPI_26, NPI_27, NPI_28, NPI_29, NPI_30, NPI_31, NPI_32,
+         NPI_33, NPI_34, NPI_35, NPI_36, NPI_37, NPI_38, NPI_39, NPI_40) %>%
+  # this is an easy way to sum across all rows
+  mutate("NPI Score" = rowSums(.)) 
+
+data_npi
+
+data_important_cols
+```
+
+```{r SPQ}
+
+# clean up and score SPQ data
+
+data_spq <- data_important_cols %>%
+  select(SA2, EB5, MT12, EB14, OS16, CA17, UP22, OS25, CA26, S27, SA29,
+         MT30, UP31, CF33, OS34, SA18, CF41, IR45, SA46, MT47, MT55, UP48,
+         OS58, S59, IR60, IR63, UP64, S65, CF66, EB67, EB70, CA73) %>%
+  # mutate - compute subscales
+  mutate("SPQ - Ideas of Reference" = IR45 + IR60 + IR63,
+         "SPQ - Social Anxiety" = SA2 + SA29 + SA18 + SA46,
+         "SPQ - Odd Beliefs" = MT12 + MT30 + MT47 + MT55,
+         "SPQ - Unusual Experiences" = UP22 + UP31 + UP48 + UP64,
+         "SPQ - Eccentric Behavior" = EB5 + EB14 + EB67 + EB70,
+         "SPQ - No Close Friends" = CF33 + CF41 + CF66,
+         "SPQ - Odd Speech" = OS25 + OS34 + OS58,
+         "SPQ - Constricted Affect" = CA17 + CA26 + CA73,
+         "SPQ - Paranoid Ideation" = S27 + S59 + S65,
+         "SPQ - Cognitive Perceptual" = )
+
+``` 
