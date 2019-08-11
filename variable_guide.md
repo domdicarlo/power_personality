@@ -6,7 +6,7 @@
 
 This is an explanation of each variable given in the final tidy dataframes output at the end of the power_personality_cleaner.Rmd script. 
 
-Each variable in this list also refers to its item number in its respective assessment.
+Each variable in this list also refers to its item number in its respective assessment, found in the "Assessments" folder.
 
 **MSOI**
 
