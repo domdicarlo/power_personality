@@ -1,0 +1,374 @@
+---
+title: "Power and Personality"
+author: "Dominic DiCarlo"
+date: "July 29, 2019"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r library import}
+
+#Import libraries
+library(readr)
+library(dplyr)
+library(tidyr)
+library(tidyverse)
+
+```
+
+```{r csv import}
+
+# path to csv data
+csv_path <- "./p&p_dummy_data.csv"
+
+# read in the qualtrics csv. change the csv_path variable
+# to the file path to the data
+the_data <- read_csv(csv_path)
+
+# let's remove a bunch of junk book keeping columns qualtrics 
+# keeps track of
+data_important_cols <- the_data %>%
+  select(-"StartDate", -"EndDate", -"Status", -"IPAddress", -"Progress",
+         -"Duration (in seconds)", -"Finished", -"RecordedDate", 
+         -"ResponseId", -"RecipientLastName", -"RecipientFirstName",
+         -"RecipientEmail", -"ExternalReference", -"LocationLatitude",
+         -"LocationLongitude", -"DistributionChannel", -"UserLanguage",
+         -"consent", -"email")
+
+# also have to delete some extra rows from qualtrics data
+data_important_cols <- data_important_cols[-c(1, 2), ]
+
+
+# turn char into numbers
+data_important_cols <- data_important_cols %>%
+  mutate_at(c(1:117), as.numeric) %>%
+  # mac ss exception (what is this?) from 118-127
+  mutate_at(c(128:138), as.numeric) %>%
+  # another exception at 139. "other" for standardized test score
+  # some people will fill in didn't take, or put in some strange test
+  mutate_at(c(140:386), as.numeric)
+  # last columns (387-399) are more confusing data. stuff like major,
+  # occupation. I have left these for now. 
+  
+  
+
+data_important_cols
+
+```
+
+```{r MSOI}
+
+# Sexual Orientation and Preferences
+
+data_msoi <- data_important_cols %>%
+  select(MSOI_1, `MSOI_2.1`, MSOI2.2, `MSOI2.3`, `MSOI2.4`, `MSOI3.1`,
+         `MSOI3.2`, `MSOI3.3`, `MSOI3.4`, `MSOI4.1`, `MSOI4.2`, `MSOI4.3`, `MSOI5`,
+         `MSOI6`, `MSOI7`, `MSOI8.1`, `MSOI8.2`, `MSOI8.3`, `MSOI8.4`, `MSOI8.5`,
+         `MSOI8.6`, `MSOI8.7`, `MSOI8.8`, `MSOI8.9`, `MSOI8.10`, `MSOI8.11`,
+         `MSOI8.12`, `MSOI8.13`, `MSOI8.14`, `MSOI8.15`, `MSOI8.16`, `MSOI8.17`,
+         `MSOI8.18`, `MSOI8.19`, `MSOI8.20`) %>%
+  rename("Sex_Orientation" = MSOI_1,
+          "Intercourse_Partners_All" = MSOI_2.1,
+         "Intercourse_Partners_Short_Term" = MSOI2.2,
+         "Intercourse_Partners_Committed_Partner" = MSOI2.3,
+         "Intercourse_Partners_Committed_Self" = MSOI2.4,
+         "Intercourse_Partners_All_(Past_Year)" = MSOI3.1,
+         "Intercourse_Partners_Short_Term_(Past_Year)" = MSOI3.2,
+         "Intercourse_Partners_Committed_Partner_(Past_Year)" = MSOI3.3,
+         "Intercourse_Partners_Committed_Self_(Past_Year)" = MSOI3.4,
+         "Intercourse_Partners_All_(Next_Five_Years)" = MSOI4.1,
+         "Intercourse_Partners_Committed_(Next_Five_Years)" = MSOI4.2,
+         "Intercourse_Partners_Short_Term_(Next_Five_Years)" = MSOI4.3,
+         "Intercourse_Partners_One_Time_Only" = MSOI5,
+         "Sex_Partners_Other_than_Partner_(In_Committed_Relationship)" = MSOI6,
+         "Fantasy_Rate_While_in_Committed_Relationship" = MSOI7,
+         "SMTO1" = MSOI8.3,
+         "SMTO2" = MSOI8.9,
+         "SMTO3" = MSOI8.4,
+         "SMTO4" = MSOI8.2,
+         "SMTO5" = MSOI8.6,
+         "SMTO6" = MSOI8.10,
+         "SMTO7" = MSOI8.8,
+         "SMTO8" = MSOI8.7,
+         "SMTO9" = MSOI8.5,
+         "SMTO10" = MSOI8.1,
+         "LMTO1" = MSOI8.17,
+         "LMTO2" = MSOI8.20,
+         "LMTO3" = MSOI8.15,
+         "LMTO4" = MSOI8.18,
+         "LMTO5" = MSOI8.12,
+         "LMTO6" = MSOI8.13,
+         "LMTO7" = MSOI8.19) %>%
+  mutate("LMTO_Score" = `LMTO1` + `LMTO2` + `LMTO3` + `LMTO4` + `LMTO5` +
+                        `LMTO6` + `LMTO7`,
+         "SMTO_Score" = `SMTO1` + `SMTO2` + `SMTO3` + `SMTO4` + `SMTO5` +
+                        `SMTO6` + `SMTO7` + `SMTO8` + `SMTO9` + `SMTO10`,
+         "Previous_Sexual_Behavior_Score" = "Intercourse_Partners_All" +
+                                            "Intercourse_Partners_All_(Past_Year)" +
+                                            "Intercourse_Partners_One_Time_Only") %>%
+         
+  
+data_msoi
+
+```
+
+
+```{r HSNS}
+
+# clean up and score HSNS data
+
+data_hsns <- data_important_cols %>%
+  select(HSNS_1, HSNS_2, HSNS_3, HSNS_4, HSNS_5, HSNS_6, HSNS_7,
+         HSNS_8, HSNS_9, HSNS_10) %>%
+  # this is an easy way to sum across all rows
+  mutate("HSNS Score" = rowSums(.)) 
+
+data_hsns
+
+```
+
+
+
+```{r NPI}
+
+# clean up and score NPI data
+
+data_npi <- data_important_cols %>%
+  select(NPI_1, NPI_2, NPI_3, NPI_4, NPI_5, NPI_6, NPI_7, NPI_8, NPI_9,
+         NPI_10, NPI_11, NPI_12, NPI_13, NPI_14, NPI_15, NPI_16, NPI_17,
+         NPI_18, NPI_19, NPI_20, NPI_21, NPI_22, NPI_23, NPI_24, 
+         NPI_25, NPI_26, NPI_27, NPI_28, NPI_29, NPI_30, NPI_31, NPI_32,
+         NPI_33, NPI_34, NPI_35, NPI_36, NPI_37, NPI_38, NPI_39, NPI_40) %>%
+  # this is an easy way to sum across all rows
+  mutate("NPI Score" = rowSums(.)) 
+
+data_npi
+
+data_important_cols
+```
+
+```{r SPQ}
+
+# clean up and score SPQ data
+
+data_spq <- data_important_cols %>%
+  select(SA2, EB5, MT12, EB14, OS16, CA17, UP22, OS25, CA26, S27, SA29,
+         MT30, UP31, CF33, OS34, SA38, CF41, IR45, SA46, MT47, MT55, UP48,
+         OS58, S59, IR60, IR63, UP64, S65, CF66, EB67, EB70, CA73) %>%
+  # mutate - compute subscales
+  mutate("SPQ - Ideas of Reference" = IR45 + IR60 + IR63,
+         "SPQ - Social Anxiety" = SA2 + SA29 + SA38 + SA46,
+         "SPQ - Odd Beliefs" = MT12 + MT30 + MT47 + MT55,
+         "SPQ - Unusual Experiences" = UP22 + UP31 + UP48 + UP64,
+         "SPQ - Eccentric Behavior" = EB5 + EB14 + EB67 + EB70,
+         "SPQ - No Close Friends" = CF33 + CF41 + CF66,
+         "SPQ - Odd Speech" = OS25 + OS34 + OS58,
+         "SPQ - Constricted Affect" = CA17 + CA26 + CA73,
+         "SPQ - Paranoid Ideation" = S27 + S59 + S65,
+         "SPQ - Cognitive-Perceptual" = `SPQ - Ideas of Reference` +
+                                        `SPQ - Odd Beliefs` +
+                                        `SPQ - Paranoid Ideation` +
+                                        `SPQ - Unusual Experiences`,
+         "SPQ - Interpersonal" = `SPQ - Social Anxiety` +
+                                 `SPQ - No Close Friends` +
+                                 `SPQ - Constricted Affect` +
+                                 `SPQ - Paranoid Ideation`,
+         "SPQ - Disorganized" = `SPQ - Odd Beliefs` +
+                                `SPQ - Odd Speech`,
+         "SPQ - Total" = SA2 + EB5 + MT12 + EB14 + OS16 + CA17 + UP22 + OS25 + 
+         CA26 + S27 + SA29 + MT30 + UP31 + CF33 + OS34 + SA38 + CF41 + IR45 + 
+         SA46 + MT47 + MT55 + UP48 + OS58 + S59 + IR60 + IR63 + UP64 + S65 + 
+         CF66 + EB67 + EB70 + CA73)
+
+data_spq
+
+data_important_cols
+``` 
+
+
+
+```{r mac ss}
+
+# here we convert the mac ss scale encoded in qualtrics to an actual data number
+
+data_important_cols$mac_ss_1 = as.numeric(gsub("Off", "0", gsub("On", "1", data_important_cols$mac_ss_1)))
+data_important_cols$mac_ss_2 = as.numeric(gsub("Off", "0", gsub("On", "2", data_important_cols$mac_ss_2)))
+data_important_cols$mac_ss_3 = as.numeric(gsub("Off", "0", gsub("On", "3", data_important_cols$mac_ss_3)))
+data_important_cols$mac_ss_4 = as.numeric(gsub("Off", "0", gsub("On", "4", data_important_cols$mac_ss_4)))
+data_important_cols$mac_ss_5 = as.numeric(gsub("Off", "0", gsub("On", "5", data_important_cols$mac_ss_5)))
+data_important_cols$mac_ss_6 = as.numeric(gsub("Off", "0", gsub("On", "6", data_important_cols$mac_ss_6)))
+data_important_cols$mac_ss_7 = as.numeric(gsub("Off", "0", gsub("On", "7", data_important_cols$mac_ss_7)))
+data_important_cols$mac_ss_8 = as.numeric(gsub("Off", "0", gsub("On", "8", data_important_cols$mac_ss_8)))
+data_important_cols$mac_ss_9 = as.numeric(gsub("Off", "0", gsub("On", "9", data_important_cols$mac_ss_9)))
+data_important_cols$mac_ss_10 = as.numeric(gsub("Off", "0", gsub("On", "10", data_important_cols$mac_ss_10)))
+
+data_important_cols <- data_important_cols %>%
+  mutate(mac_ss_1 = mac_ss_1 + mac_ss_2 + mac_ss_3 + mac_ss_4 + mac_ss_5 + mac_ss_6 +
+                  mac_ss_7 + mac_ss_8 + mac_ss_9 + mac_ss_10) %>%
+  select(-mac_ss_2, -mac_ss_3, -mac_ss_4, -mac_ss_5, -mac_ss_6,
+                  -mac_ss_7, -mac_ss_8, -mac_ss_9, -mac_ss_10) %>%
+  rename(mac_ss = mac_ss_1)
+
+
+data_mac_ss <- select(data_important_cols, mac_ss)
+
+data_important_cols
+```
+```{r APQ}
+
+# this one is more of a pain, since all the questions concern different
+# scales of answers
+
+data_apq <- select(data_important_cols, APQ_1, APQ_2, APQ_3, APQ_4,
+                   APQ_5, APQ_6, APQ_7, APQ_8, APQ_9, APQ_9_1_TEXT, 
+                   APQ_9_2_TEXT, APQ_9_3_TEXT, APQ_10, APQ_11,
+                   APQ_12, APQ_13, APQ_14, APQ_15, APQ_16, APQ_17,
+                   APQ_18) %>%
+  mutate(APQ_Grade_Trajectory = APQ_1, GPA = APQ_2, English_Grade = APQ_3,
+         Math_Grade = APQ_4, Science_Grade = APQ_5, 
+         SocialStudies_Grade = APQ_6, Grade_Intelligence_Comparison = APQ_7,
+         Tutoring = APQ_8, Standardized_Test = APQ_9, 
+         Academic_Ambition = APQ_10, Performance_Identity = APQ_11,
+         Grade_Anxiety = APQ_12, Colleague_Rapport = APQ_13, 
+         Unviersity_Identity = APQ_14, Colleague_Prejudice = APQ_15,
+         University_Happiness = APQ_16, Professor_Fairness = APQ_17,
+         University_Safety = APQ_18)
+  
+
+
+```
+
+```{r PPI}
+
+# woo hoo, found a new function that makes the job a bit easier
+# "Contains" in select selects all the columns with that string in 
+# the name
+
+data_ppi <- select(data_important_cols, contains("PPI")) %>%
+  mutate("PPI_SCORE" = rowSums(.),
+         "PPI_MACH_SCORE" = rowSums(select(., contains("MACH"))),
+         "PPI_FEAR_SCORE" = rowSums(select(., contains("FEAR"))),
+         "PPI_REBEL_SCORE" = rowSums(select(., contains("REBEL"))),
+         "PPI_BLAME_SCORE" = rowSums(select(., contains("BLAME"))),
+         "PPI_STRESS_SCORE" = rowSums(select(., contains("STRESS"))),
+         "PPI_COLD_SCORE" = rowSums(select(., contains("COLD"))),
+         "PPI_SOCIAL_SCORE" = rowSums(select(., contains("SOCIAL"))),
+         "PPI_CAREFREE_SCORE" = rowSums(select(., contains("CARE"))))
+  
+data_ppi
+
+```
+
+```{r HEXACO}
+
+data_hexaco <- select(data_important_cols, contains("OPEN"), 
+                                           contains("CONSC"), 
+                                           contains("AGREE"),
+                                           contains("EXTRA"), 
+                                           contains("EMOTION"),
+                                           contains("HONHUM")) %>%
+  mutate(OPEN_SCORE = rowSums(select(., contains("OPEN"))),
+         CONSC_SCORE = rowSums(select(., contains("CONSC"))),
+         AGREE_SCORE = rowSums(select(., contains("AGREE"))),
+         EXTRA_SCORE = rowSums(select(., contains("EXTRA"))),
+         EMOTION_SCORE = rowSums(select(., contains("EMOTION"))),
+         HONHUM_SCORE = rowSums(select(., contains("HONHUM"))))
+
+data_hexaco
+
+
+```
+
+```{r couples dominiance}
+
+# this one is on a scale from 1 (I am dominant) to 5 (the other person is dominant)
+
+data_couples_dom <- select(data_important_cols, Couples_dom)
+
+```
+
+```{r power scale}
+
+# 1 (Strongly Disagree) to 6 (Strongly Agree)
+
+data_power_scale <- select(data_important_cols, contains("FP"),
+                                                contains("DP"),
+                           AP1, AP2, AP3, AP4, AP5, AP6, AP7) %>%
+  mutate(FP_SCORE = rowSums(select(., contains("FP"))),
+         DP_SCORE = rowSums(select(., contains("DP"))),
+         AP_SCORE = rowSums(select(., contains("AP"))))
+
+data_power_scale
+
+```
+
+```{r STAI}
+
+# scores range from 20 to 80, higher is higher anxiety
+
+data_stai <- select(data_important_cols, contains("STAI")) %>%
+  mutate(STAI_SCORE = rowSums(select(., contains("STAI"))))
+
+data_stai
+
+```
+
+```{r AQ}
+
+# higher is more autistic 
+
+data_aq <- select(data_important_cols, contains("AQ_")) %>%
+  mutate(AQ_SCORE = rowSums(select(., contains("AQ_"))))
+
+data_aq
+
+```
+
+```{r PAI}
+
+# have to subtract 24 here (6 in each category), one point for each 
+# question, since the answers are off by one in their scoring
+
+data_pai <- select(data_important_cols, contains("PAI_")) %>%
+  mutate(PAI_Affective_Instability = PAI_19400 + PAI_19403 + PAI_19406 +
+                                     PAI_19409 + PAI_19413 + PAI_19417 - 6,
+         PAI_Identity_Problems = PAI_19401 + PAI_19404 + PAI_19407 +
+                                 PAI_19410 + PAI_19414 + PAI_19418 - 6,
+         PAI_Negative_Relationships = PAI_19402 + PAI_19405 + PAI_19408 +
+                                      PAI_19411 + PAI_19415 + PAI_19419 - 6,
+         PAI_Self_Harm = PAI_19412 + PAI_19416 + PAI_19420 + PAI_19421 +
+                         PAI_19422 + PAI_19423 - 6,
+         PAI_SCORE = PAI_Identity_Problems + PAI_Negative_Relationships +
+                     PAI_Self_Harm + PAI_Affective_Instability)
+
+data_pai
+
+```
+
+```{r suicide}
+
+# see readme for detailed breakdown
+
+data_suicide <- select(data_important_cols, contains("SBQ"),
+                                            current_suicide) %>%
+  mutate(suicide_thoughts_attempts = SBQ1, suicidal_thoughts_freq = SBQ2,
+         suicide_confide = SBQ3, suicide_likelihood = SBQ4,
+         current_suicidality = current_suicide)
+
+```
+
+```{r demographics}
+
+# see readme for detailed breakdown
+
+data_demography <- select(data_important_cols, birth, sex, ethnicity,
+                          state_born, marriage, occupation, major, 
+                          raised_by, smoke, alcohol, hormone_drugs,
+                          hormone_drugs_1_TEXT, hormone_drugs_2_TEXT,
+                          end) %>%
+  rename(age = birth)
+
+```
