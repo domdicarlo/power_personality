@@ -1,9 +1,22 @@
 ---
-title: "Power and Personality"
+title: "Power and Personality Processing Script"
 author: "Dominic DiCarlo"
 date: "July 29, 2019"
 output: html_document
 ---
+
+Summer 2019 Power and Personality Pilot Study. Maestripieri Lab.
+
+Script started by Dominic DiCarlo - August 2019
+
+The data has been processed in chunks. Each assessment gets its own chunk. For detailed variable breakdown to understand what the data for each assessment means, see the [variable guide](./variable_guide.md).
+
+To actually process the data, all you have to do is add the data in csv form to the same directory as this .Rmd file. Then, change the names of the csv_path variables in the {r csv import} chunk.
+
+Make sure you have the four required libraries installed, listed below in the {r library import} chunk.
+
+TO DO:
+Process the working memory data.
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
@@ -21,16 +34,26 @@ library(tidyverse)
 
 ```{r csv import}
 
-# path to csv data
-csv_path <- "./p&p_dummy_data.csv"
+# path to csv data. these are the variables to change when
+# changing the name of the data
+csv_path_surveys <- "./p&p_dummy_data.csv"
+
+csv_path_pre_tsst <- "./pre_tsst_emotions_and_stai.csv"
+
+csv_path_post_tsst <- "./post_tsst_emotions_and_stai.csv"
 
 # read in the qualtrics csv. change the csv_path variable
 # to the file path to the data
-the_data <- read_csv(csv_path)
+surveys_data <- read_csv(csv_path_surveys)
+
+pre_tsst_data <- read_csv(csv_path_pre_tsst)
+
+post_tsst_data <- read_csv(csv_path_post_tsst)
+
 
 # let's remove a bunch of junk book keeping columns qualtrics 
 # keeps track of
-data_important_cols <- the_data %>%
+surveys_sel_cols <- surveys_data %>%
   select(-"StartDate", -"EndDate", -"Status", -"IPAddress", -"Progress",
          -"Duration (in seconds)", -"Finished", -"RecordedDate", 
          -"ResponseId", -"RecipientLastName", -"RecipientFirstName",
@@ -38,12 +61,33 @@ data_important_cols <- the_data %>%
          -"LocationLongitude", -"DistributionChannel", -"UserLanguage",
          -"consent", -"email")
 
+pre_tsst_cols <- pre_tsst_data %>%
+  select(-"StartDate", -"EndDate", -"Status", -"IPAddress", -"Progress",
+         -"Duration (in seconds)", -"Finished", -"RecordedDate", 
+         -"ResponseId", -"RecipientLastName", -"RecipientFirstName",
+         -"RecipientEmail", -"ExternalReference", -"LocationLatitude",
+         -"LocationLongitude", -"DistributionChannel", -"UserLanguage",
+         -"sbj_id")
+
+post_tsst_cols <- post_tsst_data %>%
+  select(-"StartDate", -"EndDate", -"Status", -"IPAddress", -"Progress",
+         -"Duration (in seconds)", -"Finished", -"RecordedDate", 
+         -"ResponseId", -"RecipientLastName", -"RecipientFirstName",
+         -"RecipientEmail", -"ExternalReference", -"LocationLatitude",
+         -"LocationLongitude", -"DistributionChannel", -"UserLanguage",
+         -"sbj_id")
+
+
 # also have to delete some extra rows from qualtrics data
-data_important_cols <- data_important_cols[-c(1, 2), ]
+surveys_sel_cols <- surveys_sel_cols[-c(1, 2), ]
+
+pre_tsst_cols <- pre_tsst_cols[-c(1, 2), ]
+
+post_tsst_cols <- post_tsst_cols[-c(1, 2), ]
 
 
 # turn char into numbers
-data_important_cols <- data_important_cols %>%
+surveys_sel_cols <- surveys_sel_cols %>%
   mutate_at(c(1:117), as.numeric) %>%
   # mac ss exception (what is this?) from 118-127
   mutate_at(c(128:138), as.numeric) %>%
@@ -52,38 +96,55 @@ data_important_cols <- data_important_cols %>%
   mutate_at(c(140:386), as.numeric)
   # last columns (387-399) are more confusing data. stuff like major,
   # occupation. I have left these for now. 
-  
-  
 
-data_important_cols
+pre_tsst_cols <- pre_tsst_cols %>%
+  # all cols can be mutated
+  mutate_at(c(1:38), as.numeric) 
+  
+post_tsst_cols <- post_tsst_cols %>%
+  # all cols can be mutated
+  mutate_at(c(1:38), as.numeric) 
+
+
+```
+
+```{r tsst}
+
+# add up the STAI subscores as well as "SB" (whatever that is)
+pre_tsst_cols <- pre_tsst_cols %>%
+  mutate(STAI_Score <- rowSums(select(., contains("Anx"))),
+         SB_Score <- rowSums(select(., contains("pre_sb"))))
+
+post_tsst_cols <- post_tsst_cols %>%
+  mutate(STAI_Score <- rowSums(select(., contains("Anx"))),
+         SB_Score <- rowSums(select(., contains("pre_sb"))))
 
 ```
 
 ```{r MSOI}
 
 # Sexual Orientation and Preferences
-
-data_msoi <- data_important_cols %>%
-  select(MSOI_1, `MSOI_2.1`, MSOI2.2, `MSOI2.3`, `MSOI2.4`, `MSOI3.1`,
+data_msoi <- surveys_sel_cols %>%
+  select(`MSOI_1`, `MSOI_2.1`, MSOI2.2, `MSOI2.3`, `MSOI2.4`, `MSOI3.1`,
          `MSOI3.2`, `MSOI3.3`, `MSOI3.4`, `MSOI4.1`, `MSOI4.2`, `MSOI4.3`, `MSOI5`,
          `MSOI6`, `MSOI7`, `MSOI8.1`, `MSOI8.2`, `MSOI8.3`, `MSOI8.4`, `MSOI8.5`,
          `MSOI8.6`, `MSOI8.7`, `MSOI8.8`, `MSOI8.9`, `MSOI8.10`, `MSOI8.11`,
          `MSOI8.12`, `MSOI8.13`, `MSOI8.14`, `MSOI8.15`, `MSOI8.16`, `MSOI8.17`,
-         `MSOI8.18`, `MSOI8.19`, `MSOI8.20`) %>%
+         `MSOI8.18`, `MSOI8.19`, `MSOI8.20`)  %>%
   rename("Sex_Orientation" = MSOI_1,
-          "Intercourse_Partners_All" = MSOI_2.1,
+         "Intercourse_Partners_All" = MSOI_2.1,
          "Intercourse_Partners_Short_Term" = MSOI2.2,
          "Intercourse_Partners_Committed_Partner" = MSOI2.3,
          "Intercourse_Partners_Committed_Self" = MSOI2.4,
-         "Intercourse_Partners_All_(Past_Year)" = MSOI3.1,
-         "Intercourse_Partners_Short_Term_(Past_Year)" = MSOI3.2,
-         "Intercourse_Partners_Committed_Partner_(Past_Year)" = MSOI3.3,
-         "Intercourse_Partners_Committed_Self_(Past_Year)" = MSOI3.4,
-         "Intercourse_Partners_All_(Next_Five_Years)" = MSOI4.1,
-         "Intercourse_Partners_Committed_(Next_Five_Years)" = MSOI4.2,
-         "Intercourse_Partners_Short_Term_(Next_Five_Years)" = MSOI4.3,
+         "Intercourse_Partners_All_Past_Year" = MSOI3.1,
+         "Intercourse_Partners_Short_Term_Past_Year" = MSOI3.2,
+         "Intercourse_Partners_Committed_Partner_Past_Year" = MSOI3.3,
+         "Intercourse_Partners_Committed_Self_Past_Year" = MSOI3.4,
+         "Intercourse_Partners_All_Next_Five_Years" = MSOI4.1,
+         "Intercourse_Partners_Committed_Next_Five_Years" = MSOI4.2,
+         "Intercourse_Partners_Short_Term_Next_Five_Years" = MSOI4.3,
          "Intercourse_Partners_One_Time_Only" = MSOI5,
-         "Sex_Partners_Other_than_Partner_(In_Committed_Relationship)" = MSOI6,
+         "Sex_Partners_Other_than_Partner_In_Committed_Relationship" = MSOI6,
          "Fantasy_Rate_While_in_Committed_Relationship" = MSOI7,
          "SMTO1" = MSOI8.3,
          "SMTO2" = MSOI8.9,
@@ -102,16 +163,16 @@ data_msoi <- data_important_cols %>%
          "LMTO5" = MSOI8.12,
          "LMTO6" = MSOI8.13,
          "LMTO7" = MSOI8.19) %>%
+  mutate_all(~replace(., is.na(.), 0)) %>%
   mutate("LMTO_Score" = `LMTO1` + `LMTO2` + `LMTO3` + `LMTO4` + `LMTO5` +
                         `LMTO6` + `LMTO7`,
          "SMTO_Score" = `SMTO1` + `SMTO2` + `SMTO3` + `SMTO4` + `SMTO5` +
                         `SMTO6` + `SMTO7` + `SMTO8` + `SMTO9` + `SMTO10`,
-         "Previous_Sexual_Behavior_Score" = "Intercourse_Partners_All" +
-                                            "Intercourse_Partners_All_(Past_Year)" +
-                                            "Intercourse_Partners_One_Time_Only") %>%
+         "Previous_Sexual_Behavior_Score" = Intercourse_Partners_All +
+                                            Intercourse_Partners_All_Past_Year +
+                                            Intercourse_Partners_One_Time_Only) 
          
   
-data_msoi
 
 ```
 
@@ -120,7 +181,7 @@ data_msoi
 
 # clean up and score HSNS data
 
-data_hsns <- data_important_cols %>%
+data_hsns <- surveys_sel_cols %>%
   select(HSNS_1, HSNS_2, HSNS_3, HSNS_4, HSNS_5, HSNS_6, HSNS_7,
          HSNS_8, HSNS_9, HSNS_10) %>%
   # this is an easy way to sum across all rows
@@ -136,56 +197,56 @@ data_hsns
 
 # clean up and score NPI data
 
-data_npi <- data_important_cols %>%
+data_npi <- surveys_sel_cols %>%
   select(NPI_1, NPI_2, NPI_3, NPI_4, NPI_5, NPI_6, NPI_7, NPI_8, NPI_9,
          NPI_10, NPI_11, NPI_12, NPI_13, NPI_14, NPI_15, NPI_16, NPI_17,
          NPI_18, NPI_19, NPI_20, NPI_21, NPI_22, NPI_23, NPI_24, 
          NPI_25, NPI_26, NPI_27, NPI_28, NPI_29, NPI_30, NPI_31, NPI_32,
          NPI_33, NPI_34, NPI_35, NPI_36, NPI_37, NPI_38, NPI_39, NPI_40) %>%
   # this is an easy way to sum across all rows
-  mutate("NPI Score" = rowSums(.)) 
+  mutate("NPI_Score" = rowSums(.)) 
 
 data_npi
 
-data_important_cols
+surveys_sel_cols
 ```
 
 ```{r SPQ}
 
 # clean up and score SPQ data
 
-data_spq <- data_important_cols %>%
+data_spq <- surveys_sel_cols %>%
   select(SA2, EB5, MT12, EB14, OS16, CA17, UP22, OS25, CA26, S27, SA29,
          MT30, UP31, CF33, OS34, SA38, CF41, IR45, SA46, MT47, MT55, UP48,
          OS58, S59, IR60, IR63, UP64, S65, CF66, EB67, EB70, CA73) %>%
   # mutate - compute subscales
-  mutate("SPQ - Ideas of Reference" = IR45 + IR60 + IR63,
-         "SPQ - Social Anxiety" = SA2 + SA29 + SA38 + SA46,
-         "SPQ - Odd Beliefs" = MT12 + MT30 + MT47 + MT55,
-         "SPQ - Unusual Experiences" = UP22 + UP31 + UP48 + UP64,
-         "SPQ - Eccentric Behavior" = EB5 + EB14 + EB67 + EB70,
-         "SPQ - No Close Friends" = CF33 + CF41 + CF66,
-         "SPQ - Odd Speech" = OS25 + OS34 + OS58,
-         "SPQ - Constricted Affect" = CA17 + CA26 + CA73,
-         "SPQ - Paranoid Ideation" = S27 + S59 + S65,
-         "SPQ - Cognitive-Perceptual" = `SPQ - Ideas of Reference` +
-                                        `SPQ - Odd Beliefs` +
-                                        `SPQ - Paranoid Ideation` +
-                                        `SPQ - Unusual Experiences`,
-         "SPQ - Interpersonal" = `SPQ - Social Anxiety` +
-                                 `SPQ - No Close Friends` +
-                                 `SPQ - Constricted Affect` +
-                                 `SPQ - Paranoid Ideation`,
-         "SPQ - Disorganized" = `SPQ - Odd Beliefs` +
-                                `SPQ - Odd Speech`,
-         "SPQ - Total" = SA2 + EB5 + MT12 + EB14 + OS16 + CA17 + UP22 + OS25 + 
+  mutate("SPQ_Ideas_of_Reference" = IR45 + IR60 + IR63,
+         "SPQ_Social_Anxiety" = SA2 + SA29 + SA38 + SA46,
+         "SPQ_Odd_Beliefs" = MT12 + MT30 + MT47 + MT55,
+         "SPQ_Unusual_Experiences" = UP22 + UP31 + UP48 + UP64,
+         "SPQ_Eccentric_Behavior" = EB5 + EB14 + EB67 + EB70,
+         "SPQ_No_Close_Friends" = CF33 + CF41 + CF66,
+         "SPQ_Odd_Speech" = OS25 + OS34 + OS58,
+         "SPQ_Constricted_Affect" = CA17 + CA26 + CA73,
+         "SPQ_Paranoid_Ideation" = S27 + S59 + S65,
+         "SPQ_Cognitive_Perceptual" = `SPQ_Ideas_of_Reference` +
+                                        `SPQ_Odd_Beliefs` +
+                                        `SPQ_Paranoid_Ideation` +
+                                        `SPQ_Unusual_Experiences`,
+         "SPQ_Interpersonal" = `SPQ_Social_Anxiety` +
+                                 `SPQ_No_Close_Friends` +
+                                 `SPQ_Constricted_Affect` +
+                                 `SPQ_Paranoid_Ideation`,
+         "SPQ_Disorganized" = `SPQ_Odd_Beliefs` +
+                                `SPQ_Odd_Speech`,
+         "SPQ_Total" = SA2 + EB5 + MT12 + EB14 + OS16 + CA17 + UP22 + OS25 + 
          CA26 + S27 + SA29 + MT30 + UP31 + CF33 + OS34 + SA38 + CF41 + IR45 + 
          SA46 + MT47 + MT55 + UP48 + OS58 + S59 + IR60 + IR63 + UP64 + S65 + 
          CF66 + EB67 + EB70 + CA73)
 
 data_spq
 
-data_important_cols
+surveys_sel_cols
 ``` 
 
 
@@ -194,18 +255,22 @@ data_important_cols
 
 # here we convert the mac ss scale encoded in qualtrics to an actual data number
 
-data_important_cols$mac_ss_1 = as.numeric(gsub("Off", "0", gsub("On", "1", data_important_cols$mac_ss_1)))
-data_important_cols$mac_ss_2 = as.numeric(gsub("Off", "0", gsub("On", "2", data_important_cols$mac_ss_2)))
-data_important_cols$mac_ss_3 = as.numeric(gsub("Off", "0", gsub("On", "3", data_important_cols$mac_ss_3)))
-data_important_cols$mac_ss_4 = as.numeric(gsub("Off", "0", gsub("On", "4", data_important_cols$mac_ss_4)))
-data_important_cols$mac_ss_5 = as.numeric(gsub("Off", "0", gsub("On", "5", data_important_cols$mac_ss_5)))
-data_important_cols$mac_ss_6 = as.numeric(gsub("Off", "0", gsub("On", "6", data_important_cols$mac_ss_6)))
-data_important_cols$mac_ss_7 = as.numeric(gsub("Off", "0", gsub("On", "7", data_important_cols$mac_ss_7)))
-data_important_cols$mac_ss_8 = as.numeric(gsub("Off", "0", gsub("On", "8", data_important_cols$mac_ss_8)))
-data_important_cols$mac_ss_9 = as.numeric(gsub("Off", "0", gsub("On", "9", data_important_cols$mac_ss_9)))
-data_important_cols$mac_ss_10 = as.numeric(gsub("Off", "0", gsub("On", "10", data_important_cols$mac_ss_10)))
+# this changes offs to 0 and ons to 1-10 (by index). only one of these 10 columns 
+# should have an on value. 
+surveys_sel_cols$mac_ss_1 = as.numeric(gsub("Off", "0", gsub("On", "1", surveys_sel_cols$mac_ss_1)))
+surveys_sel_cols$mac_ss_2 = as.numeric(gsub("Off", "0", gsub("On", "2", surveys_sel_cols$mac_ss_2)))
+surveys_sel_cols$mac_ss_3 = as.numeric(gsub("Off", "0", gsub("On", "3", surveys_sel_cols$mac_ss_3)))
+surveys_sel_cols$mac_ss_4 = as.numeric(gsub("Off", "0", gsub("On", "4", surveys_sel_cols$mac_ss_4)))
+surveys_sel_cols$mac_ss_5 = as.numeric(gsub("Off", "0", gsub("On", "5", surveys_sel_cols$mac_ss_5)))
+surveys_sel_cols$mac_ss_6 = as.numeric(gsub("Off", "0", gsub("On", "6", surveys_sel_cols$mac_ss_6)))
+surveys_sel_cols$mac_ss_7 = as.numeric(gsub("Off", "0", gsub("On", "7", surveys_sel_cols$mac_ss_7)))
+surveys_sel_cols$mac_ss_8 = as.numeric(gsub("Off", "0", gsub("On", "8", surveys_sel_cols$mac_ss_8)))
+surveys_sel_cols$mac_ss_9 = as.numeric(gsub("Off", "0", gsub("On", "9", surveys_sel_cols$mac_ss_9)))
+surveys_sel_cols$mac_ss_10 = as.numeric(gsub("Off", "0", gsub("On", "10", surveys_sel_cols$mac_ss_10)))
 
-data_important_cols <- data_important_cols %>%
+# we then add them all together, so that only one column is needed to
+# denote mac_ss
+surveys_sel_cols <- surveys_sel_cols %>%
   mutate(mac_ss_1 = mac_ss_1 + mac_ss_2 + mac_ss_3 + mac_ss_4 + mac_ss_5 + mac_ss_6 +
                   mac_ss_7 + mac_ss_8 + mac_ss_9 + mac_ss_10) %>%
   select(-mac_ss_2, -mac_ss_3, -mac_ss_4, -mac_ss_5, -mac_ss_6,
@@ -213,16 +278,13 @@ data_important_cols <- data_important_cols %>%
   rename(mac_ss = mac_ss_1)
 
 
-data_mac_ss <- select(data_important_cols, mac_ss)
+data_mac_ss <- select(surveys_sel_cols, mac_ss)
 
-data_important_cols
+surveys_sel_cols
 ```
 ```{r APQ}
 
-# this one is more of a pain, since all the questions concern different
-# scales of answers
-
-data_apq <- select(data_important_cols, APQ_1, APQ_2, APQ_3, APQ_4,
+data_apq <- select(surveys_sel_cols, APQ_1, APQ_2, APQ_3, APQ_4,
                    APQ_5, APQ_6, APQ_7, APQ_8, APQ_9, APQ_9_1_TEXT, 
                    APQ_9_2_TEXT, APQ_9_3_TEXT, APQ_10, APQ_11,
                    APQ_12, APQ_13, APQ_14, APQ_15, APQ_16, APQ_17,
@@ -231,12 +293,15 @@ data_apq <- select(data_important_cols, APQ_1, APQ_2, APQ_3, APQ_4,
          Math_Grade = APQ_4, Science_Grade = APQ_5, 
          SocialStudies_Grade = APQ_6, Grade_Intelligence_Comparison = APQ_7,
          Tutoring = APQ_8, Standardized_Test = APQ_9, 
+         SAT_Score = APQ_9_1_TEXT, ACT_Score = APQ_9_2_TEXT,
+         Other_Test_Score = APQ_9_3_TEXT,
          Academic_Ambition = APQ_10, Performance_Identity = APQ_11,
          Grade_Anxiety = APQ_12, Colleague_Rapport = APQ_13, 
-         Unviersity_Identity = APQ_14, Colleague_Prejudice = APQ_15,
+         Unviersity_Belonging = APQ_14, Colleague_Prejudice = APQ_15,
          University_Happiness = APQ_16, Professor_Fairness = APQ_17,
          University_Safety = APQ_18)
-  
+
+data_apq
 
 
 ```
@@ -247,8 +312,10 @@ data_apq <- select(data_important_cols, APQ_1, APQ_2, APQ_3, APQ_4,
 # "Contains" in select selects all the columns with that string in 
 # the name
 
-data_ppi <- select(data_important_cols, contains("PPI")) %>%
+data_ppi <- select(surveys_sel_cols, contains("PPI")) %>%
   mutate("PPI_SCORE" = rowSums(.),
+         # this way we can sum all of the questions of a subscale in
+         # one pass, by selecting the columns with the identifying string
          "PPI_MACH_SCORE" = rowSums(select(., contains("MACH"))),
          "PPI_FEAR_SCORE" = rowSums(select(., contains("FEAR"))),
          "PPI_REBEL_SCORE" = rowSums(select(., contains("REBEL"))),
@@ -264,7 +331,7 @@ data_ppi
 
 ```{r HEXACO}
 
-data_hexaco <- select(data_important_cols, contains("OPEN"), 
+data_hexaco <- select(surveys_sel_cols, contains("OPEN"), 
                                            contains("CONSC"), 
                                            contains("AGREE"),
                                            contains("EXTRA"), 
@@ -286,7 +353,7 @@ data_hexaco
 
 # this one is on a scale from 1 (I am dominant) to 5 (the other person is dominant)
 
-data_couples_dom <- select(data_important_cols, Couples_dom)
+data_couples_dom <- select(surveys_sel_cols, Couples_dom)
 
 ```
 
@@ -294,7 +361,7 @@ data_couples_dom <- select(data_important_cols, Couples_dom)
 
 # 1 (Strongly Disagree) to 6 (Strongly Agree)
 
-data_power_scale <- select(data_important_cols, contains("FP"),
+data_power_scale <- select(surveys_sel_cols, contains("FP"),
                                                 contains("DP"),
                            AP1, AP2, AP3, AP4, AP5, AP6, AP7) %>%
   mutate(FP_SCORE = rowSums(select(., contains("FP"))),
@@ -309,7 +376,7 @@ data_power_scale
 
 # scores range from 20 to 80, higher is higher anxiety
 
-data_stai <- select(data_important_cols, contains("STAI")) %>%
+data_stai <- select(surveys_sel_cols, contains("STAI")) %>%
   mutate(STAI_SCORE = rowSums(select(., contains("STAI"))))
 
 data_stai
@@ -320,7 +387,7 @@ data_stai
 
 # higher is more autistic 
 
-data_aq <- select(data_important_cols, contains("AQ_")) %>%
+data_aq <- select(surveys_sel_cols, contains("AQ_")) %>%
   mutate(AQ_SCORE = rowSums(select(., contains("AQ_"))))
 
 data_aq
@@ -332,7 +399,7 @@ data_aq
 # have to subtract 24 here (6 in each category), one point for each 
 # question, since the answers are off by one in their scoring
 
-data_pai <- select(data_important_cols, contains("PAI_")) %>%
+data_pai <- select(surveys_sel_cols, contains("PAI_")) %>%
   mutate(PAI_Affective_Instability = PAI_19400 + PAI_19403 + PAI_19406 +
                                      PAI_19409 + PAI_19413 + PAI_19417 - 6,
          PAI_Identity_Problems = PAI_19401 + PAI_19404 + PAI_19407 +
@@ -352,7 +419,7 @@ data_pai
 
 # see readme for detailed breakdown
 
-data_suicide <- select(data_important_cols, contains("SBQ"),
+data_suicide <- select(surveys_sel_cols, contains("SBQ"),
                                             current_suicide) %>%
   mutate(suicide_thoughts_attempts = SBQ1, suicidal_thoughts_freq = SBQ2,
          suicide_confide = SBQ3, suicide_likelihood = SBQ4,
@@ -364,7 +431,7 @@ data_suicide <- select(data_important_cols, contains("SBQ"),
 
 # see readme for detailed breakdown
 
-data_demography <- select(data_important_cols, birth, sex, ethnicity,
+data_demography <- select(surveys_sel_cols, birth, sex, ethnicity,
                           state_born, marriage, occupation, major, 
                           raised_by, smoke, alcohol, hormone_drugs,
                           hormone_drugs_1_TEXT, hormone_drugs_2_TEXT,
