@@ -6,7 +6,11 @@
 
 This is an explanation of each variable given in the final tidy dataframes output at the end of the power_personality_cleaner.Rmd script. 
 
-Each variable in this list also refers to its item number in its respective assessment, found in the "Assessments" folder. FOr more information about what these assessments and questions are addressing, check the assessments folder.
+Each variable in this list also refers to its item number in its respective assessment, found in the "assessments" folder. For more information about what these assessments and questions are addressing, check the assessments folder.
+
+## **NOTE!!!!**
+
+All variables are actually completely lower case in the file, so please forgive my capitalizing. Spaces have been replaced with underscores
 
 **MSOI**
 
@@ -40,57 +44,21 @@ Each variable in this list also refers to its item number in its respective asse
 
 "Fantasy Rate While in Committed Relationship" - MSOI 7
 
-"SMTO1" - MSOI 8.3 
-
-"SMTO2" - MSOI 8.9
-
-"SMTO3" - MSOI 8.4
-  
-"SMTO4" - MSOI 8.2
-
-"SMTO5" - MSOI 8.6
-
-"SMTO6" - MSOI 8.10
-
-"SMTO7" - MSOI 8.8
-
-"SMTO8" - MSOI 8.7
-
-"SMTO9" - MSOI 8.5
-
-"SMTO10" - MSOI 8.1
-
-"LMTO1" - MSOI 8.17
-
-"LMTO2" - MSOI 8.20
-
-"LMTO3" - MSOI 8.15
-
-"LMTO4" - MSOI 8.18
-
-"LMTO5" - MSOI 8.12
-
-"LMTO6" - MSOI 8.13
-
-"LMTO7" - MSOI 8.19
-
 "LMTO Score" 
 "SMTO Score"
 "Previous Sexual Behavior Score" - These are the relevant score from the 2007 Jackson and Kirkpatrick Paper on MSOI. For more information, see that paper.
 
 **HSNS**
 
-HSNS_1 -> HSNS_10 - correlates to their respective HSNS assessment item numbers
-
 "HSNS Score" -> Calculated simply by adding up all the HSNS items together.
 
 **NPI**
 
-All the NPI questions correspond to their respective questions in the questionnaire stored here. The NPI_Score is the score on the actual subscale.
+The NPI_Score is the score on the NPI scale
 
 **SPQ**
 
-The SPQ individual questions are as notated from the SPQ-BR. The various subscales are based on the SPQ-BR paper's detailing of these subscales, found in the folder for this assessment. The total score is of course the total score on the scale.
+The various subscales are based on the SPQ-BR paper's detailing of these subscales, found in the folder for this assessment. The total score is of course the total score on the scale.
 
 **mac ss**
 
@@ -226,19 +194,19 @@ This question is only asking: "Who is more dominant in the relationship?"
 
 **Power Scale**
 
-The question numbers match their corresponding questions in the Power QUestionnaire Item list. FP = Feeling Powerful, DP = Desire for Power, AP = Attention to Power
+FP = Feeling Powerful, DP = Desire for Power, AP = Attention to Power
 
 **STAI**
 
-Each STAI question corresponds to its numbered question in the STAI assessment pdf. The total score ranges from 20-80, higher is higher anxiety
+The total score ranges from 20-80, higher is higher anxiety
 
 **AQ**
 
-Each AQ question corresponds to its numbered question in the AQ assessment pdf. 
+aq_score - self explanatory
 
 **PAI**
 
-The questions are exactly as numbered in the PAI assessment PDF, the subscales are the listed subscales. For more info about these scales, see the paper (found in the assessments folder in PAI subfolder).
+The subscales are the listed subscales in the paper. For more info about these scales, see the paper (found in the assessments folder in PAI subfolder).
 
 **Suicide**
 
@@ -263,9 +231,6 @@ suicide_confide - "Have you ever told someone that you were going to commit suic
 3 - Yes, at one time, and really wanted to die
 4 - Yes, more than once, but did not want to do it
 5 - Yes, more than once, and really wanted to do it
-
-
-
 
 suicide_likelihood - "How likely is it that you will attempt suicide one day?"
 1 - Never
@@ -337,4 +302,50 @@ hormone_drugs_2_TEXT - if hormone_drugs answered yes, this text string is the na
 
 end - comments offered for the study 
 
+**TSST**
 
+pre/post_TSST_ShameBehavior_Score - as titled, looks at the shame measurements for the test before/after the TSST
+
+pre/post_TSST_Devaluation_Score - as titled, looks at the devaluation measurements for the test before/after the TSST
+
+pre/post_TSST_STAI_Score - as titled, looks at the STAI(Anxiety) measurements for the test before/after the TSST
+
+pre/post_TSST_STAI_Score - as titled, looks at the STAI(Anxiety) measurements for the test before/after the TSST
+
+TSST_(blank)_Diff_Score - measures the subtraction between the before and after measurement for the tsst
+
+**In lab info**
+
+*Working memory task* 
+
+fta.score - This is the score the participant achieved when the full-trial accuracy scoring method is used.
+
+prop.score -  This is the score the participant achieved when the proportion correct scoring method is used. here, partially correct trials count.
+
+number.successes 	- The score obtained by the participant when the number of correctly recalled elements method of scoring is used.
+
+processing.accuracy 	- The proportion of the symmetry judgements that were successfully answered.
+
+processing.median.rt -	The median response time for answering during the processing phase.
+
+max.span -	Maximum list length at which the participant successfully recalled all the elements in the trial.
+
+span.2.corr - Number of trials successfully answered (all grids recalled) at list length 2
+
+span.3.corr -	Number of trials successfully answered (all grids recalled) at list length 3 
+
+span.4.corr -	Number of trials successfully answered (all grids recalled) at list length 4
+
+span.5.corr -	Number of trials successfully answered (all grids recalled) at list length 5 
+
+span.6.corr -	Number of trials successfully answered (all grids recalled) at list length 6 
+
+span.7.corr -	Number of trials successfully answered (all grids recalled) at list length 7
+
+*other*
+
+eaten, drank, smoked, exercised - each of these are if the person did this thing, either in the last hour or in the day. y or n.
+
+handgrip_1/2/3 - score in lbs for handgrip strength of three trials
+
+max_handgrip - score in lbs for max of three trials in handgrip strength
