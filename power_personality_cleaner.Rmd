@@ -16,9 +16,8 @@ To actually process the data, all you have to do is add the data in csv form to 
 Make sure you have the four required libraries installed, listed below in the {r library import} chunk.
 
 TO DO:
-Process the working memory data.
 
-Figure out how to match up (by email?) the pre/post tsst data with the survey data
+Clean up a bit more 
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
@@ -38,7 +37,6 @@ library(tidyverse)
 
 # path to csv data. these are the variables to change when
 # changing the name of the data
-<<<<<<< HEAD
 csv_path_surveys <- "./data/p_and_p_temp_data.csv"
 
 csv_path_pre_tsst <- "./data/pre_tsst_temp_data.csv"
@@ -48,15 +46,6 @@ csv_path_post_tsst <- "./data/post_tsst_temp_data.csv"
 csv_path_in_lab <- "./data/in_lab_info_temp.csv"
 
 csv_wm_test <- "./data/wm_data_processed.csv"
-=======
-csv_path_surveys <- "./p_and_p_temp_data.csv"
-
-csv_path_pre_tsst <- "./pre_tsst_temp_data.csv"
-
-csv_path_post_tsst <- "./post_tsst_temp_data.csv"
-
-csv_path_in_lab <- "./in_lab_info_temp.csv"
->>>>>>> 3873ff8b11510911dbb752cd1ebbae39e49837bd
 
 # read in the qualtrics csv. change the csv_path variable
 # to the file path to the data
@@ -67,15 +56,11 @@ pre_tsst_data <- read_csv(csv_path_pre_tsst)
 post_tsst_data <- read_csv(csv_path_post_tsst)
 
 in_lab_data <- read_csv(csv_path_in_lab, skip = 1) %>%
-<<<<<<< HEAD
   mutate(sbj_id = as.numeric(sbj_id)) %>%
   mutate(max_handgrip = max(handgrip_1, handgrip_2, handgrip_3))
 
 wm_data <- read_csv(csv_wm_test) %>%
   rename(sbj_id = pcode)
-=======
-  mutate(sbj_id = as.numeric(sbj_id))
->>>>>>> 3873ff8b11510911dbb752cd1ebbae39e49837bd
 
 # let's remove a bunch of junk book keeping columns qualtrics 
 # keeps track of
@@ -144,7 +129,6 @@ post_tsst_cols <- post_tsst_cols %>%
 # these together
 
 
-<<<<<<< HEAD
 pre_tsst_cols <- pre_tsst_cols %>%
   mutate(pre_tsst_stai_score = rowSums(select(., contains("preAnx"))),
          pre_tsst_shamebehavior_score = rowSums(select(., contains("pre_sb"))),
@@ -179,44 +163,10 @@ tsst_cols <- left_join(pre_tsst_cols, post_tsst_cols) %>%
          tsst_anger_diff = post_tsst_shame - pre_tsst_shame) 
 
 
-=======
-# add up the STAI subscores as well as "SB" and "D" (shamge behavior and
-# devaluation)
-# also add a column to mark whether pre or post tsst so we can bind 
-# these together
-
-post_tsst_cols
-
-pre_tsst_cols <- pre_tsst_cols %>%
-  mutate(pre_TSST_STAI_Score = rowSums(select(., contains("preAnx"))),
-         pre_TSST_Shame_Score = rowSums(select(., contains("pre_sb"))),
-         pre_TSST_Devaluation_Score = rowSums(select(., contains("pre_d"))))
-
-post_tsst_cols <- post_tsst_cols %>%
-  mutate(post_TSST_STAI_Score = rowSums(select(., contains("postAnx"))),
-         post_TSST_Shame_Score = rowSums(select(., contains("post_sb"))),
-         post_TSST_Devaluation_Score = rowSums(select(., contains("post_d"))))
-
-pre_tsst_cols
-tsst_cols <- left_join(pre_tsst_cols, post_tsst_cols) %>%
-  mutate(TSST_STAI_Diff = post_TSST_STAI_Score - pre_TSST_STAI_Score,
-         TSST_Shame_Diff = post_TSST_Shame_Score - pre_TSST_Shame_Score,
-         TSST_Devaluation_Diff = 
-           post_TSST_Devaluation_Score - pre_TSST_Devaluation_Score)
-
-tsst_cols
-
-in_lab_data
->>>>>>> 3873ff8b11510911dbb752cd1ebbae39e49837bd
-
 # now we need to add the in lab info to this dataframe. 
 
 tsst_and_in_lab_data <- inner_join(tsst_cols, in_lab_data)
 
-<<<<<<< HEAD
-=======
-tsst_and_in_lab_data
->>>>>>> 3873ff8b11510911dbb752cd1ebbae39e49837bd
 
 ```
 
@@ -286,14 +236,10 @@ data_hsns <- surveys_sel_cols %>%
   select(HSNS_1, HSNS_2, HSNS_3, HSNS_4, HSNS_5, HSNS_6, HSNS_7,
          HSNS_8, HSNS_9, HSNS_10, email) %>%
   # this is an easy way to sum across all rows
-<<<<<<< HEAD
   mutate("hsns_score" = rowSums(select(., contains("HSNS")))) %>%
   # get rid of unneeded columns
   select(-HSNS_1, -HSNS_2, -HSNS_3, -HSNS_4, -HSNS_5, -HSNS_6, -HSNS_7,
          -HSNS_8, -HSNS_9, -HSNS_10)
-=======
-  mutate("HSNS_Score" = rowSums(select(., contains("HSNS"))))
->>>>>>> 3873ff8b11510911dbb752cd1ebbae39e49837bd
 
 
 ```
@@ -311,7 +257,6 @@ data_npi <- surveys_sel_cols %>%
          NPI_25, NPI_26, NPI_27, NPI_28, NPI_29, NPI_30, NPI_31, NPI_32,
          NPI_33, NPI_34, NPI_35, NPI_36, NPI_37, NPI_38, NPI_39, NPI_40) %>%
   # this is an easy way to sum across all rows
-<<<<<<< HEAD
   mutate("npi_score" = rowSums(select(., contains("NPI")))) %>%
   # get rid of unneeded columns
   select(-NPI_1, -NPI_2, -NPI_3, -NPI_4, -NPI_5, -NPI_6, -NPI_7, -NPI_8, -NPI_9,
@@ -319,9 +264,6 @@ data_npi <- surveys_sel_cols %>%
          -NPI_18, -NPI_19, -NPI_20, -NPI_21, -NPI_22, -NPI_23, -NPI_24, 
          -NPI_25, -NPI_26, -NPI_27, -NPI_28, -NPI_29, -NPI_30, -NPI_31, -NPI_32,
          -NPI_33, -NPI_34, -NPI_35, -NPI_36, -NPI_37, -NPI_38, -NPI_39, -NPI_40) 
-=======
-  mutate("NPI_Score" = rowSums(select(., contains("NPI"))))
->>>>>>> 3873ff8b11510911dbb752cd1ebbae39e49837bd
 
 
 ```
@@ -434,11 +376,7 @@ data_apq <- select(surveys_sel_cols, email, APQ_1, APQ_2, APQ_3, APQ_4,
 # the name
 
 data_ppi <- select(surveys_sel_cols, email, contains("PPI")) %>%
-<<<<<<< HEAD
   mutate("ppi_score" = rowSums(select(., contains("PPI"))),
-=======
-  mutate("PPI_SCORE" = rowSums(select(., contains("PPI"))),
->>>>>>> 3873ff8b11510911dbb752cd1ebbae39e49837bd
          # this way we can sum all of the questions of a subscale in
          # one pass, by selecting the columns with the identifying string
          "ppi_mach_score" = rowSums(select(., contains("MACH"))),
@@ -451,10 +389,6 @@ data_ppi <- select(surveys_sel_cols, email, contains("PPI")) %>%
          "ppi_care_score" = rowSums(select(., contains("CARE")))) %>%
   select(-contains("PPI-"))
   
-<<<<<<< HEAD
-=======
-
->>>>>>> 3873ff8b11510911dbb752cd1ebbae39e49837bd
 ```
 
 ```{r HEXACO}
@@ -474,10 +408,6 @@ data_hexaco <- select(surveys_sel_cols, email, contains("OPEN"),
     select(email, open_score, consc_score, agree_score, extra_score,
            emotion_score, honhum_score)
 
-<<<<<<< HEAD
-data_hexaco
-=======
->>>>>>> 3873ff8b11510911dbb752cd1ebbae39e49837bd
 
 ```
 
@@ -496,18 +426,11 @@ data_couples_dom <- select(surveys_sel_cols, email, Couples_dom)
 data_power_scale <- select(surveys_sel_cols, email, contains("FP"),
                                                 contains("DP"),
                            AP1, AP2, AP3, AP4, AP5, AP6, AP7) %>%
-<<<<<<< HEAD
   mutate(fp_score = rowSums(select(., contains("FP"))),
          dp_score = rowSums(select(., contains("DP"))),
          ap_score = rowSums(select(., contains("AP"))),
          power_score = rowSums(select(., contains("P")))) %>%
   select(email, fp_score, dp_score, ap_score, power_score)
-=======
-  mutate(FP_SCORE = rowSums(select(., contains("FP"))),
-         DP_SCORE = rowSums(select(., contains("DP"))),
-         AP_SCORE = rowSums(select(., contains("AP"))),
-         POWER_SCORE = rowSums(select(., contains("P"))))
->>>>>>> 3873ff8b11510911dbb752cd1ebbae39e49837bd
 
 
 ```
@@ -517,12 +440,8 @@ data_power_scale <- select(surveys_sel_cols, email, contains("FP"),
 # scores range from 20 to 80, higher is higher anxiety
 
 data_stai <- select(surveys_sel_cols, email, contains("STAI")) %>%
-<<<<<<< HEAD
   mutate(stai_score = rowSums(select(., contains("STAI")))) %>%
   select(email, stai_score)
-=======
-  mutate(STAI_SCORE = rowSums(select(., contains("STAI"))))
->>>>>>> 3873ff8b11510911dbb752cd1ebbae39e49837bd
 
 
 ```
@@ -532,12 +451,8 @@ data_stai <- select(surveys_sel_cols, email, contains("STAI")) %>%
 # higher is more autistic 
 
 data_aq <- select(surveys_sel_cols, email, contains("AQ_")) %>%
-<<<<<<< HEAD
   mutate(aq_score = rowSums(select(., contains("AQ_")))) %>%
   select(email, aq_score)
-=======
-  mutate(AQ_SCORE = rowSums(select(., contains("AQ_"))))
->>>>>>> 3873ff8b11510911dbb752cd1ebbae39e49837bd
 
 
 ```
@@ -548,15 +463,9 @@ data_aq <- select(surveys_sel_cols, email, contains("AQ_")) %>%
 # question, since the answers are off by one in their scoring
 
 data_pai <- select(surveys_sel_cols, email, contains("PAI_")) %>%
-<<<<<<< HEAD
   mutate(pai_affective_instability = PAI_19400 + PAI_19403 + PAI_19406 +
                                    PAI_19409 + PAI_19413 + PAI_19417 - 6,
          pai_identity_problems = PAI_19401 + PAI_19404 + PAI_19407 +
-=======
-  mutate(PAI_Affective_Instability = PAI_19400 + PAI_19403 + PAI_19406 +
-                                     PAI_19409 + PAI_19413 + PAI_19417 - 6,
-         PAI_Identity_Problems = PAI_19401 + PAI_19404 + PAI_19407 +
->>>>>>> 3873ff8b11510911dbb752cd1ebbae39e49837bd
                                  PAI_19410 + PAI_19414 + PAI_19418 - 6,
          pai_negative_relationships = PAI_19402 + PAI_19405 + PAI_19408 +
                                       PAI_19411 + PAI_19415 + PAI_19419 - 6,
@@ -599,6 +508,8 @@ data_demography <- select(surveys_sel_cols, birth, sex, ethnicity,
 
 ```{r merge}
 
+# merge the various dataframes together now
+
 cleaned_data <- left_join(tsst_and_in_lab_data, data_msoi) %>%
   left_join(data_hsns) %>%
   left_join(data_npi) %>%
@@ -613,146 +524,119 @@ cleaned_data <- left_join(tsst_and_in_lab_data, data_msoi) %>%
   left_join(data_aq) %>%
   left_join(data_pai) %>%
   left_join(data_suicide) %>%
-<<<<<<< HEAD
   left_join(data_demography) %>%
   left_join(wm_data)
-=======
-  left_join(data_demography)
->>>>>>> 3873ff8b11510911dbb752cd1ebbae39e49837bd
 
 ```
 
-```{r}
+
+```{r write data}
+
+write_csv(cleaned_data, "./data/power_personality_summer_2019_data_cleaned.csv")
+
+```
+
+```{r analyses}
+
+# ignore and write your own if found on github
 
 cleaned_data %>%
-<<<<<<< HEAD
-  ggplot(aes(x = HSNS_Score, y = tsst_Shame_Diff)) +
-=======
-  ggplot(aes(x = HSNS_Score, y = TSST_Shame_Diff)) +
->>>>>>> 3873ff8b11510911dbb752cd1ebbae39e49837bd
+  ggplot(aes(x = hsns_score, y = tsst_shame_diff)) +
   geom_point() +
   geom_smooth(method = lm)
 
 cleaned_data %>%
-<<<<<<< HEAD
-  ggplot(aes(x = HSNS_Score, y = tsst_Devaluation_Diff + tsst_Shame_Diff)) +
-=======
-  ggplot(aes(x = HSNS_Score, y = TSST_Devaluation_Diff + TSST_Shame_Diff)) +
->>>>>>> 3873ff8b11510911dbb752cd1ebbae39e49837bd
+  ggplot(aes(x = hsns_score, y = tsst_devaluation_diff + tsst_shame_diff)) +
   geom_point() +
   geom_smooth(method = lm) +
   facet_wrap(~sex)
 
 cleaned_data %>%
   filter(!is.na(sex)) %>%
-<<<<<<< HEAD
-  ggplot(aes(x = EXTRA_SCORE, y = tsst_Devaluation_Diff)) +
-=======
-  ggplot(aes(x = EXTRA_SCORE, y = TSST_Devaluation_Diff)) +
->>>>>>> 3873ff8b11510911dbb752cd1ebbae39e49837bd
+  ggplot(aes(x = extra_score, y = tsst_devaluation_diff)) +
   geom_point() +
   geom_smooth(method = lm) 
 
 
 cleaned_data %>%
   filter(!is.na(sex)) %>%
-<<<<<<< HEAD
-  ggplot(aes(x = EXTRA_SCORE, y = tsst_Shame_Diff)) +
-=======
-  ggplot(aes(x = EXTRA_SCORE, y = TSST_Shame_Diff)) +
->>>>>>> 3873ff8b11510911dbb752cd1ebbae39e49837bd
+  ggplot(aes(x = extra_score, y = tsst_shame_diff)) +
   geom_point() +
   geom_smooth(method = lm) 
 
 cleaned_data %>%
   filter(!is.na(sex)) %>%
-  ggplot(aes(x = HSNS_Score, y = SPQ_Total)) +
+  ggplot(aes(x = hsns_score, y = spq_score)) +
   geom_point() +
   geom_smooth(method = lm) #+
 
 
 cleaned_data_female %>%
   filter(!is.na(sex)) %>%
-  ggplot(aes(x = PAI_SCORE, y = DP_SCORE)) +
+  ggplot(aes(x = pai_score, y = dp_score)) +
   geom_point() +
   geom_smooth(method = lm)
 
 cleaned_data_female %>%
   filter(!is.na(sex)) %>%
-  ggplot(aes(x = PAI_SCORE, y = AP_SCORE)) +
+  ggplot(aes(x = pai_score, y = ap_score)) +
   geom_point() +
   geom_smooth(method = lm)
 
 cleaned_data_female %>%
   filter(!is.na(sex)) %>%
-  ggplot(aes(x = PAI_SCORE, y = FP_SCORE)) +
+  ggplot(aes(x = pai_score, y = fp_score)) +
   geom_point() +
   geom_smooth(method = lm)
 
 cleaned_data %>%
   filter(!is.na(sex)) %>%
-  ggplot(aes(x = SPQ_Total, y = DP_SCORE)) +
-  geom_point() +
-  geom_smooth(method = lm)
-
-
-cleaned_data %>%
-  filter(!is.na(sex)) %>%
-  ggplot(aes(x = SPQ_Total, y = DP_SCORE)) +
+  ggplot(aes(x = spq_score, y = dp_score)) +
   geom_point() +
   geom_smooth(method = lm)
 
 
 cleaned_data %>%
   filter(!is.na(sex)) %>%
-  ggplot(aes(x = HSNS_Score, y = DP_SCORE)) +
+  ggplot(aes(x = spq_score, y = dp_score)) +
+  geom_point() +
+  geom_smooth(method = lm)
+
+
+cleaned_data %>%
+  filter(!is.na(sex)) %>%
+  ggplot(aes(x = hsns_score, y = dp_score)) +
   geom_point() +
   geom_smooth(method = lm)
 
 cleaned_data %>%
   filter(!is.na(sex)) %>%
-  ggplot(aes(x = SPQ_Total, y = FP_SCORE)) +
+  ggplot(aes(x = spq_score, y = fp_score)) +
   geom_point() +
-<<<<<<< HEAD
   geom_smooth(method = loess)
-=======
-  geom_smooth(method = lm)
->>>>>>> 3873ff8b11510911dbb752cd1ebbae39e49837bd
-
-
-cleaned_data %>%
-  filter(!is.na(sex)) %>%
-  group_by(sex) %>%
-  summarize(AQ = mean(AQ_SCORE)) %>%
-  ggplot(aes(x = sex, y = AQ)) +
-  geom_col()
-
-cleaned_data_female <- filter(cleaned_data, sex == 2)
-cleaned_data_male <- filter(cleaned_data, sex == 1)
-
-<<<<<<< HEAD
-cor.test(cleaned_data$SPQ_Total, cleaned_data$tsst_Devaluation_Diff)
-=======
-cor.test(cleaned_data$SPQ_Total, cleaned_data$TSST_Devaluation_Diff)
->>>>>>> 3873ff8b11510911dbb752cd1ebbae39e49837bd
-cor.test(cleaned_data_female$PAI_SCORE, cleaned_data_female$DP_SCORE)
-cor.test(cleaned_data$EXTRA_SCORE, cleaned_data$handgrip_3)
-
-
-<<<<<<< HEAD
-
-cleaned_data %>%
-  filter(!is.na(sex)) %>%
-  ggplot(aes(x = PPI_STRESS_SCORE, y = max.span)) +
-  geom_point() +
-  geom_smooth(method = lm) 
+# 
+# 
+# cleaned_data %>%
+#   filter(!is.na(sex)) %>%
+#   group_by(sex) %>%
+#   summarize(AQ = mean(AQ_SCORE)) %>%
+#   ggplot(aes(x = sex, y = AQ)) +
+#   geom_col()
+# 
+# cleaned_data_female <- filter(cleaned_data, sex == 2)
+# cleaned_data_male <- filter(cleaned_data, sex == 1)
+# 
+# cor.test(cleaned_data$SPQ_Total, cleaned_data$tsst_Devaluation_Diff)
+# cor.test(cleaned_data_female$PAI_SCORE, cleaned_data_female$DP_SCORE)
+# cor.test(cleaned_data$EXTRA_SCORE, cleaned_data$handgrip_3)
+# 
+# 
+# 
+# cleaned_data %>%
+#   filter(!is.na(sex)) %>%
+#   ggplot(aes(x = PPI_STRESS_SCORE, y = max.span)) +
+#   geom_point() +
+#   geom_smooth(method = lm) 
 
 ```
 
-```{r write data for joe}
-
-write_csv(cleaned_data, "power_personality_summer_2019_data_cleaned.csv")
-
-=======
->>>>>>> 3873ff8b11510911dbb752cd1ebbae39e49837bd
-```
