@@ -46,7 +46,7 @@ csv_path_post_tsst <- "./data/post_tsst_temp_data.csv"
 
 csv_path_in_lab <- "./data/in_lab_info_temp.csv"
 
-csv_wm_test <- "./data/wm_data/wm_processed.csv"
+csv_wm_test <- "./data/wm_data_processed.csv"
 
 # read in the qualtrics csv. change the csv_path variable
 # to the file path to the data
@@ -182,21 +182,21 @@ data_msoi <- surveys_sel_cols %>%
          `MSOI8.6`, `MSOI8.7`, `MSOI8.8`, `MSOI8.9`, `MSOI8.10`, `MSOI8.11`,
          `MSOI8.12`, `MSOI8.13`, `MSOI8.14`, `MSOI8.15`, `MSOI8.16`, `MSOI8.17`,
          `MSOI8.18`, `MSOI8.19`, `MSOI8.20`)  %>%
-  rename("Sex_Orientation" = MSOI_1,
-         "Intercourse_Partners_All" = MSOI_2.1,
-         "Intercourse_Partners_Short_Term" = MSOI2.2,
-         "Intercourse_Partners_Committed_Partner" = MSOI2.3,
-         "Intercourse_Partners_Committed_Self" = MSOI2.4,
-         "Intercourse_Partners_All_Past_Year" = MSOI3.1,
-         "Intercourse_Partners_Short_Term_Past_Year" = MSOI3.2,
-         "Intercourse_Partners_Committed_Partner_Past_Year" = MSOI3.3,
-         "Intercourse_Partners_Committed_Self_Past_Year" = MSOI3.4,
-         "Intercourse_Partners_All_Next_Five_Years" = MSOI4.1,
-         "Intercourse_Partners_Committed_Next_Five_Years" = MSOI4.2,
-         "Intercourse_Partners_Short_Term_Next_Five_Years" = MSOI4.3,
-         "Intercourse_Partners_One_Time_Only" = MSOI5,
-         "Sex_Partners_Other_than_Partner_In_Committed_Relationship" = MSOI6,
-         "Fantasy_Rate_While_in_Committed_Relationship" = MSOI7,
+  rename("sex_orientation" = MSOI_1,
+         "intercourse_partners_all" = MSOI_2.1,
+         "intercourse_partners_short_term" = MSOI2.2,
+         "intercourse_partners_committed_partner" = MSOI2.3,
+         "intercourse_partners_committed_self" = MSOI2.4,
+         "intercourse_partners_all_past_year" = MSOI3.1,
+         "intercourse_partners_short_term_past_year" = MSOI3.2,
+         "intercourse_partners_committed_partner_past_year" = MSOI3.3,
+         "intercourse_partners_committed_self_past_year" = MSOI3.4,
+         "intercourse_partners_all_next_five_years" = MSOI4.1,
+         "intercourse_partners_committed_next_five_years" = MSOI4.2,
+         "intercourse_partners_short_term_next_five_years" = MSOI4.3,
+         "intercourse_partners_one_time_only" = MSOI5,
+         "sex_partners_other_than_partner_in_committed_relationship" = MSOI6,
+         "fantasy_rate_while_in_committed_relationship" = MSOI7,
          "SMTO1" = MSOI8.3,
          "SMTO2" = MSOI8.9,
          "SMTO3" = MSOI8.4,
@@ -219,11 +219,11 @@ data_msoi <- surveys_sel_cols %>%
                         `LMTO6` + `LMTO7`,
          "smto_score" = `SMTO1` + `SMTO2` + `SMTO3` + `SMTO4` + `SMTO5` +
                         `SMTO6` + `SMTO7` + `SMTO8` + `SMTO9` + `SMTO10`,
-         "previous_sexual_behavior_score" = Intercourse_Partners_All +
-                                            Intercourse_Partners_All_Past_Year +
-                                            Intercourse_Partners_One_Time_Only) %>%
+         "previous_sexual_behavior_score" = intercourse_partners_all +
+                                            intercourse_partners_all_past_year +
+                                            intercourse_partners_one_time_only) %>%
   # remove unneeded columns
-  select(-contains("MTO"))
+  select(-contains("MTO"), -contains("MSOI"))
          
   
 
@@ -240,7 +240,8 @@ data_hsns <- surveys_sel_cols %>%
   # this is an easy way to sum across all rows
   mutate("hsns_score" = rowSums(select(., contains("HSNS")))) %>%
   # get rid of unneeded columns
-  select(-contains("HSNS"))
+  select(-HSNS_1, -HSNS_2, -HSNS_3, -HSNS_4, -HSNS_5, -HSNS_6, -HSNS_7,
+         -HSNS_8, -HSNS_9, -HSNS_10)
 
 
 ```
@@ -260,7 +261,11 @@ data_npi <- surveys_sel_cols %>%
   # this is an easy way to sum across all rows
   mutate("npi_score" = rowSums(select(., contains("NPI")))) %>%
   # get rid of unneeded columns
-  select(-contains("NPI"))
+  select(-NPI_1, -NPI_2, -NPI_3, -NPI_4, -NPI_5, -NPI_6, -NPI_7, -NPI_8, -NPI_9,
+         -NPI_10, -NPI_11, -NPI_12, -NPI_13, -NPI_14, -NPI_15, -NPI_16, -NPI_17,
+         -NPI_18, -NPI_19, -NPI_20, -NPI_21, -NPI_22, -NPI_23, -NPI_24, 
+         -NPI_25, -NPI_26, -NPI_27, -NPI_28, -NPI_29, -NPI_30, -NPI_31, -NPI_32,
+         -NPI_33, -NPI_34, -NPI_35, -NPI_36, -NPI_37, -NPI_38, -NPI_39, -NPI_40) 
 
 
 ```
@@ -384,9 +389,8 @@ data_ppi <- select(surveys_sel_cols, email, contains("PPI")) %>%
          "ppi_cold_score" = rowSums(select(., contains("COLD"))),
          "ppi_social_score" = rowSums(select(., contains("SOCIAL"))),
          "ppi_care_score" = rowSums(select(., contains("CARE")))) %>%
-  select(-contains("PPI"))
+  select(-contains("PPI-"))
   
-
 ```
 
 ```{r HEXACO}
@@ -403,9 +407,10 @@ data_hexaco <- select(surveys_sel_cols, email, contains("OPEN"),
          extra_score = rowSums(select(., contains("EXTRA"))),
          emotion_score = rowSums(select(., contains("EMOTION"))),
          honhum_score = rowSums(select(., contains("HONHUM")))) %>%
-  select(-contains("OPEN"), -contains("CONSC"), -contains("AGREE"),
-         -contains("EXTRA"), -contains("EMOTION"), -contains("HONHUM"))
+    select(email, open_score, consc_score, agree_score, extra_score,
+           emotion_score, honhum_score)
 
+data_hexaco
 
 ```
 
@@ -428,7 +433,7 @@ data_power_scale <- select(surveys_sel_cols, email, contains("FP"),
          dp_score = rowSums(select(., contains("DP"))),
          ap_score = rowSums(select(., contains("AP"))),
          power_score = rowSums(select(., contains("P")))) %>%
-  select(-contains("AP"), -contains("FP"), -contains("DP"))
+  select(email, fp_score, dp_score, ap_score, power_score)
 
 
 ```
@@ -439,7 +444,7 @@ data_power_scale <- select(surveys_sel_cols, email, contains("FP"),
 
 data_stai <- select(surveys_sel_cols, email, contains("STAI")) %>%
   mutate(stai_score = rowSums(select(., contains("STAI")))) %>%
-  select(-contains("STAI"))
+  select(email, stai_score)
 
 
 ```
@@ -450,7 +455,7 @@ data_stai <- select(surveys_sel_cols, email, contains("STAI")) %>%
 
 data_aq <- select(surveys_sel_cols, email, contains("AQ_")) %>%
   mutate(aq_score = rowSums(select(., contains("AQ_")))) %>%
-  select(-contains("AQ_"))
+  select(email, aq_score)
 
 
 ```
@@ -471,7 +476,8 @@ data_pai <- select(surveys_sel_cols, email, contains("PAI_")) %>%
                          PAI_19422 + PAI_19423 - 6,
          pai_score = pai_identity_problems + pai_negative_relationships +
                      pai_self_harm + pai_affective_instability) %>%
-  select(-contains("PAI_"))
+  select(pai_affective_instability, pai_identity_problems,
+         pai_negative_relationships, pai_self_harm, pai_score, email)
 
 
 ```
