@@ -318,7 +318,7 @@ TSST_(blank)_Diff_Score - measures the subtraction between the before and after 
 
 *Working memory task* 
 
-fta.score - This is the score the participant achieved when the full-trial accuracy scoring method is used.
+fta.score - This is the score the participant achieved when the full-trial accuracy scoring method is used. In other words, only completely correct trials count.
 
 prop.score -  This is the score the participant achieved when the proportion correct scoring method is used. here, partially correct trials count.
 
