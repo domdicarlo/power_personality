@@ -1,0 +1,273 @@
+body {
+	margin:0;
+	padding:0;
+	font-family: arial, sans-serif, verdana;
+	color:#333333;
+	font-size: 11px;
+	overflow-y: scroll;
+}
+p {
+	margin:0 0 8px 0;
+	padding:0 25px 0 25px;
+	font-family: arial, sans-serif, verdana;
+	line-height: 15px;
+	font-size: 11px;
+	color: #333333;
+}
+
+.default #container {
+	width: 900px;
+	background: #FFFFFF url(images/bgtile_center.jpg) 202px 0px repeat-y;
+	margin: 0 auto;
+	text-align: left;
+}
+
+.default #mainContent {
+	width: 900px;
+	float:left;
+	background-image:url(images/bgtile_center.jpg);
+	background-repeat: repeat-y;
+	background-position: left top;
+	padding: 0;
+	margin: 0;
+}
+.default #centerContent {
+	width:483px !important;
+	float: right;
+	position: relative;
+	/* min-height: 400px; */
+	height:auto !important;
+	display: inline-block;
+}
+
+.default #rightContent {
+	width:215px;
+	float: right;
+	position: relative;
+	/* min-height: 400px; */
+	height:auto !important;
+	display: inline-block;
+}
+
+.default #leftNav {
+	width:202px;
+	margin: 10px 0px 0px 0px;
+	padding: 0px;
+}
+
+.default #leftNavBoxes {
+	background-image:url(images/bgtile_blue.gif);
+	background-repeat: repeat;
+}
+
+table#memberProfile p,
+table#memberProfile h2 {
+	padding:0 5px;
+}
+
+/* Left Nav Styles
+----------------------------------------------- */
+
+.default #leftnav1 {
+	background-image:url(images/leftnavOff.jpg);
+	background-repeat: no-repeat;
+	background-position: left top;
+	color: #000000;
+	text-decoration: none;
+	font-size:12px;
+	line-height:15px;
+	text-align: left;
+	margin:0px 0px 1px 0px;
+	padding: 6px 0px 6px 25px;
+	display: block;
+	cursor:pointer;
+}
+.default #leftnav1:hover {
+	color: #ffffff;
+	text-decoration: none;
+	background-image:url(images/leftnavOn.jpg);
+	background-repeat: no-repeat;
+	background-position: left top;
+}
+
+
+.static {
+	display:block;
+	background-image:url(images/leftnavOn.jpg);
+	background-position: left top;
+	background-repeat: no-repeat;
+	padding: 6px 0px 6px 25px;
+	margin:0px 0px 0px 0px;
+	color: #FFFFFF;
+}
+
+.default #leftnav2 {
+	display: block;
+	color: #000000;
+	width:187px;
+	height:15px;
+	border:thin solid #6699CC;
+	background-image:url(images/leftnav2On.jpg);
+	background-repeat: no-repeat;
+	background-position: left top;
+	text-decoration: none;
+	font-size:12px;
+	text-align: left;
+	margin:0px 0px 0px 0px;
+	padding: 8px 0px 5px 15px;
+	display: block;
+	cursor:pointer;
+}
+.default #leftnav2:hover {
+	color: #ffffff;
+	text-decoration: none;
+	background-image:url(images/leftnavRollout.jpg);
+	background-repeat: no-repeat;
+	background-position: left top;
+}
+
+.default #leftnav3 {
+	color: #ffffff;
+	text-decoration: none;
+	font-size:12px;
+	text-align: left;
+	margin:0px 0px 0px 0px;
+	padding: 2px 0px 6px 30px;
+	display: block;
+	background-image:url(images/leftnavOn.jpg);
+	background-repeat: repeat-y;
+	background-position: left top;
+}
+
+.default #leftnav3:hover {
+	text-decoration:underline;
+	font-weight:bold;
+}
+
+.static3 {
+	color: #ffffff;
+	text-decoration: none;
+	font-size:12px;
+	text-align: left;
+	margin:0px 0px 0px 0px;
+	padding: 2px 0px 6px 30px;
+	display: block;
+	background-image:url(images/leftnavOn.jpg);
+	background-repeat: repeat-y;
+	background-position: left top;
+	font-weight:bold;
+}
+
+.clearFloat	{
+	float:none;
+	clear:both;
+}
+
+
+/* Lists
+----------------------------------------------- */
+ol {
+	margin:0 0 8px 0;
+	padding:0 0 0 40px;
+	font-family: arial, sans-serif, verdana;
+	line-height: 15px;
+	font-size: 11px;
+	color: #333333;
+}
+
+.default #simpleList {
+	margin:10px 0 0px 0;
+	padding:0 25px 0 45px;
+	font-family: arial, sans-serif, verdana;
+	line-height: 15px;
+	font-size: 11px;
+	color: #333333;
+	list-style-type: lower-alpha;
+}
+
+.default #simpleList2 {
+	margin:10px 0 0px 0;
+	padding:0 25px 0 45px;
+	font-family: arial, sans-serif, verdana;
+	line-height: 15px;
+	font-size: 11px;
+	color: #333333;
+	list-style-type: decimal;
+}
+
+
+/* Search Box
+----------------------------------------------- */
+.default #searchBox {
+	background-image:url(images/bgtile_ltblue.jpg);
+	background-position: left;
+	background-repeat: repeat-y;
+	margin: 0px;
+	padding: 0px;
+}
+
+
+/* Body Links
+----------------------------------------------- */
+a.body:link, a.body:active, a.body:visited {
+	color:#cc9933;
+	text-decoration: none;
+	font-weight: bold;
+	}
+a.body:hover {
+	color: #cc6600;
+	text-decoration: underline;
+	font-weight: bold;
+	} 
+span.static a,
+span.static a:link,
+span.static a:visited,
+span.static a:hover {
+	color:#FFFFFF;
+	text-decoration:none;
+	}
+
+/* Headers
+----------------------------------------------- */
+h3 {
+	font-family: arial, sans-serif, verdana;
+	margin:12px 0 10px 0;
+	padding:0 0 0 25px;
+	font-size: 12px;
+	color: #6699cc;
+	font-weight: bold;
+	}
+h2 {
+	margin:12px 0px 5px 0px;
+	padding:0px 0px 0px 25px;
+	font-size: 12px;
+	color: #333333;
+	font-weight: bold;
+	}
+
+
+blockquote p {
+	font-size: .9em;
+}
+
+/*
+.default #centerContentTextFooter {
+	width: 483px;
+	float: right;
+}
+
+.default #footer {
+	background:url(images/footer.gif);
+	width: 900px;
+	padding:10px 0px 10px 0px;
+	position: relative;
+	display: inline-block;
+}
+.default #footerText {
+	width: 328px;
+	font-size:10px;
+	margin:0 auto;
+	color: #666666;
+}
+*/
+

@@ -1,0 +1,433 @@
+
+body {
+	background-color: #D5EDB3;
+	font-family: Arial,Helvetica;
+}
+
+@media (max-width: 768px){
+.header {
+	background-color: #D5EDB3;
+	border-bottom: 3px solid #99CC66;
+	padding: 0px;
+}
+
+.header-title {
+	font-weight: 700;
+	letter-spacing: 3.8px;
+	font-size: 32px;
+	color: #5C743D;
+}
+
+.header-description {
+	margin-top: 15px;
+	color: #030;
+	font-weight: 400;
+	letter-spacing: 4.4px;	
+}
+
+.header-authors {
+	margin-top: 10px;
+	color: #030;
+	font-weight: 400;
+	letter-spacing: 4.4px;	
+		
+}
+
+.container {
+	font-family: Arial,Helvetica;
+	background-color: #F4FFE4;
+	
+}
+
+} 
+
+
+/*
+ * Desktop styles
+ */
+
+
+@media (min-width: 768px) {
+
+.container {
+	width: 100%;
+	padding: 0px;
+	padding-bottom: 30px;
+	margin:0px;
+	font-family: Arial,Helvetica;
+	font-size: 13px;
+	background-color: #F4FFE4;
+}
+.row {
+	margin-right: 0px;
+}
+	
+
+/* MASTHEAD */
+.header {
+	background-color: #D5EDB3;
+	border-bottom: 3px solid #99CC66;
+	padding: 0px;
+	padding-top: 20px;
+}
+
+.header-title {
+	font-weight: 700;
+	letter-spacing: 3.8px;
+	font-size: 24px;
+	color: #5C743D;
+	margin-top: 0px;
+}
+
+.header-description {
+	margin-top: 15px;
+	color: #030;
+	font-weight: 400;
+	font-size: 12px;
+	letter-spacing: 4.4px;	
+}
+
+.header-authors {
+	margin-top: 10px;
+	color: #030;
+	font-weight: 400;
+	font-size: 12px;
+	letter-spacing: 4.4px;	
+		
+}
+
+
+	
+/* NAVIGATION */	
+  
+
+/* make sidebar nav vertical */ 
+
+ .active {
+ 	background-color: #D5EDB3;
+ }
+ .sidebar-nav .navbar .navbar-collapse {
+   padding: 0;
+   max-height: none;
+ }
+ .sidebar-nav .navbar ul {
+   float: none;
+   display: block;
+   padding-top: 25px;
+   background-color: #5C743D;
+ }
+ .sidebar-nav .navbar li {
+   float: none;
+   display: block;
+   border-top: 1px solid #D5EDB3;
+   background-color: #5C743D;
+   font-size: 11px;
+   letter-spacing: 1.1px;
+   font-weight: 700;
+   color: #D5EDB3;
+   
+ }
+ .sidebar-nav .navbar li:hover {
+   background-color: #D5EDB3;
+
+ }  
+ 
+ .sidebar-nav .navbar li a {
+ 	color: 	#D5EDB3; 
+   padding-top: 12px;
+   padding-bottom: 12px;
+ }
+ .sidebar-nav .navbar li a:hover {
+   color: #993300;
+
+ }
+ .active-nav {
+   border-bottom: 4px solid transparent;
+   border-top: 4px solid transparent;
+   border-left: 4px solid #000000;
+   display: inline-block;
+   height: 0;
+   opacity: 0.3;
+   vertical-align: top;
+   width: 0;
+ }
+ 
+}
+
+
+
+.page-title { 
+	color: #666666;
+	font-size: 18px;
+	letter-spacing: 3.8px;
+	margin-top: 40px;
+	margin-bottom: 30px;
+}
+
+.page-subtitle {
+	font-weight: 700;
+	font-style: italic;
+	font-size: 16px;
+	margin-top: 40px;
+}
+
+.page-boldsub {
+	margin-top: 20px;
+	font-weight: 700;
+}
+
+
+
+.footer {
+	background-color: #D5EDB3;
+	border-top: 3px solid #99CC66;
+	padding: 0px;
+	text-align:center;
+	padding-top: 20px;
+	height: 100px;
+}
+
+
+/*
+ * Index Page
+ */
+.index-book {
+	display: block;
+	min-width: 350px;
+}
+.index-author {
+	font-size: 10px;
+}
+.index-book-img {
+	margin-right: 15px;
+	float: left;	
+}
+
+/*
+ * Books Page
+ */
+ 
+.book-div {
+	text-align: center;
+}
+
+/*
+ * Inventory Page
+ */
+ 
+ .btn-testlg { 
+  color: #444; 
+  background-color: #99CC66; 
+  border-color: #5C743D; 
+} 
+ 
+.btn-testlg:hover, 
+.btn-testlg:focus, 
+.btn-testlg:active, 
+.btn-testlg.active, 
+.open .dropdown-toggle.btn-testlg { 
+  color: #444; 
+  background-color: #D5EDB3; 
+  border-color: #5C743D; 
+} 
+ 
+.btn-testlg:active, 
+.btn-testlg.active, 
+.open .dropdown-toggle.btn-testlg { 
+  background-image: none; 
+} 
+ 
+.btn-testlg.disabled, 
+.btn-testlg[disabled], 
+fieldset[disabled] .btn-testlg, 
+.btn-testlg.disabled:hover, 
+.btn-testlg[disabled]:hover, 
+fieldset[disabled] .btn-testlg:hover, 
+.btn-testlg.disabled:focus, 
+.btn-testlg[disabled]:focus, 
+fieldset[disabled] .btn-testlg:focus, 
+.btn-testlg.disabled:active, 
+.btn-testlg[disabled]:active, 
+fieldset[disabled] .btn-testlg:active, 
+.btn-testlg.disabled.active, 
+.btn-testlg[disabled].active, 
+fieldset[disabled] .btn-testlg.active { 
+  background-color: #99CC66; 
+  border-color: #5C743D; 
+} 
+ 
+.btn-testlg .badge { 
+  color: #99CC66; 
+  background-color: #444; 
+}
+
+.download-table td {
+	padding: 5px;
+	font: 11px Arial,Helvetica,sans-serif;
+	color: #666;
+	font-weight: 600;
+}
+
+
+
+/*
+ * Choose Language
+ */
+.language-english {
+	font-size: 10px;
+}
+.btn-lang {
+	margin: 10px;
+	width: 200px;
+}
+.language-buttons {
+	max-width: 700px;
+}
+
+/*
+ * GP Page
+ */
+.gp_question {
+    margin-top: 10px;
+    margin-top: 20px;
+    max-width: 600px;
+    border: solid 1px #999999;
+    padding: 15px;
+}
+.gp_options {
+    font-weight: bold;
+
+}
+.gp_options input {
+    margin-left: 10px;
+    margin-right: 2px;
+    position: relative;
+    top: 2px;
+}
+.gp_question table {
+	margin-top: 4px;
+}
+
+
+/*
+ * Demographics Page
+ */
+ 
+.demographics-table {
+	max-width: 800px;
+	
+}
+.demographics-table td {
+	padding: 20px;
+	font-size: 13px;
+}
+.region_form {
+    margin-top: 7px;
+}
+
+
+.demographics-table-noleftpad {
+    max-width: 800px;
+
+}
+.demographics-table-noleftpad td {
+    padding: 20px;
+    padding-left: 0px;
+    font-size: 13px;
+}
+
+
+/*
+ * Quiz Page
+ */
+.question {
+	display: none;
+}
+
+.question a {
+	margin-right: 20px;
+}
+.question_text {
+	font-size: 14px;
+	font-weight: 700;
+}
+.progress {
+	max-width: 600px;
+}
+.progress-text {
+	text-align: center;
+	font-weight: 700;
+	font-size: 14px;
+	max-width: 600px;
+	
+}
+
+
+/*
+ * Results Page
+ */
+#results_graph td {
+	font-size: 13px;
+	font-family: Arial;
+	color: #333333;
+}
+#results_graph tr {
+	height: 28px;
+}
+
+.faq h3 {
+	font-size: 14px;
+	font-weight: 700;
+}
+
+.results-page-info {
+	position: relative;
+	top: -1px;
+	left: -3px;
+}
+
+
+#results_facet_table td {
+	font-size: 13px;
+	font-family: Arial;
+	color: #333333;
+	padding: 10px;
+}
+
+div.description{
+    width:500px;
+    background-color:#D5EDB3;
+    position:absolute;
+    left:20px;
+    margin-top: -35px;
+    padding:10px;
+    border-top: 1px solid #666666;
+    border-right: 2px solid #666666;
+    border-left: 1px solid #666666;
+    border-bottom: 2px solid #666666;
+    z-index: 5;
+}
+div.description-close {
+	margin-top: 3px;
+	font-size: 10px;
+	text-align: center;
+}
+
+.results_warning {
+	border: 1px solid #999999;
+	padding: 10px;
+	margin-top: 8px;
+	margin-bottom: 8px;
+	background-color: #FFFFCC;
+	max-width: 600px;
+}
+.results_warning span {
+	font-size: 1.2em;
+	margin-right: 5px;
+}
+
+
+/* admin area */
+.login-table td {
+	padding: 20px;
+}

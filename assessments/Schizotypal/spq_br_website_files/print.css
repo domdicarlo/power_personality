@@ -1,0 +1,114 @@
+body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,pre,form,fieldset,input,p,blockquote,th,td{margin:0;padding:0;}
+table{border-collapse:collapse;border-spacing:0;}
+fieldset,img{border:0;}
+address,caption,cite,code,dfn,em,strong,th,var{font-style:normal;font-weight:normal;}
+ol,ul {list-style:none;}
+caption,th {text-align:left;}
+h1,h2,h3,h4,h5,h6{font-size:100%;}
+q:before,q:after{content:'';}
+
+body {
+ 
+	font-size:10px;
+}
+.search-wrapper {
+	display:none;
+	visibility:hidden;
+}
+.banner-bg {
+	display:none;
+	visibility:hidden;
+}
+#footer-wrapper,#nav,.breadcrumb,#frm_search_form,#sidebar-alt,#sidebar{
+	display:none;
+	visibility:hidden;
+}
+
+#wrap div#footer-wrapper  + center {
+	
+	display:none;
+	visibility:hidden;
+}
+
+
+/************FORMIDABLE CUSTOM DISPLAY*************/
+.entries-custom-display-section {
+	width:98%;
+}
+.entries-custom-display-section div.odd{
+	margin:0;
+	margin-top:.5em;
+	border:1px solid #C7C7C7;
+	clear:both;
+	float:left;
+	width:48%;
+	padding:5px;
+	height:1%;
+}
+.entries-custom-display-section div.even{
+	clear:right;
+	margin:0;
+	float:right;
+	width:48%;
+	margin-top:.5em;
+	border:0;
+	border:1px solid #C7C7C7;
+	padding:4px;
+}
+.committee-detail {
+	margin-left:1em;
+}
+.entry-custom-display-content ul li {
+    list-style-type: square;
+    margin: 0 0 0 0;
+    padding: 0;
+
+}
+.entry-custom-display-content h2 {
+    border-bottom: medium none;
+    border-top: 1px solid;
+    font-size: 18px;
+    padding: 0 0 5px;
+
+}
+.entry-custom-display-content h3 {
+	display:block;
+	margin-top:1em;	
+}
+.entry-custom-display-content div.committee {
+	margin-top:1em;	
+}
+.label {
+   font-weight:bold;
+}
+.entry-custom-display-left-column {
+	width:49%;
+	float:left;
+	margin-top: -8px;
+}
+.entry-custom-display-right-column {
+	width:49%;
+	margin-top: -25px;
+	float:right;
+}
+.entry-email-phone ul, .entry-email-phone ul li {
+	list-style:square;
+}
+.entry-email-phone ul {
+	clear:both;
+}
+.entry-email-phone ul li:nth-child(1) { list-style:none !important; list-style-type:none;}
+.entry-email-phone ul li {
+	float:left;
+	margin-left:1em;
+}
+.margin-bottom {
+	margin-bottom:1em;	
+}
+.border-top {
+	border-top: 1px solid #CCCCCC; 
+}
+.border-bottom {
+	border-bottom: 1px solid #CCCCCC; 
+}
+ 
